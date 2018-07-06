@@ -1,0 +1,106 @@
+﻿@model Web2.Models.classchannel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div id="app">
+    
+    <div v-if="testlg">
+        <br><br><br>
+        <div class="col-md-12">
+            <input type="text" placeholder="username" class="form-control" v-model="username1" />
+        </div>
+        <div class="col-md-12">
+            <input type="password" placeholder="password" class="form-control" v-model="password1" />
+        </div>
+
+        <button type="button" class="btn btn-success" v-on:click="login">Login</button>
+        <button type="button" class="btn btn-success" v-on:click="regis">Register</button>
+    </div>   
+    <div v-if="!testlg">
+        <br><br><br>
+        <div class="col-md-11">
+            <input type="text" placeholder="username" class="form-control" v-model="username" />
+        </div>
+        <div class="col-md-11">
+            <input type="password" placeholder="password" class="form-control" v-model="password" />
+        </div>
+        <div class="col-md-11">
+            <input type="text" placeholder="room" class="form-control" v-model="room" />
+        </div>
+        <button type="button" class="btn btn-success" v-on:click="save">SAVE</button>
+
+    </div>
+    
+  
+</div>
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            username: '',
+            password: '',
+            username1: '',
+            password1: '',
+            room:'',
+            testlg: true,
+          
+
+        },
+       
+        methods: {
+            login: function () {
+                const data = {
+                  
+                        auser: this.username1,
+                        apass: this.password1
+                        
+                  
+
+                }
+               this.$http.post('@Url.Action("Check", "Home")', data
+        ).then(response => {
+            if (response.data.status === '200') {
+                window.location = '@Url.Action("Contact","Home")' //ไป about.cshtml
+                alert(response.data.message)
+              
+            } else {
+                alert(response.data.message)
+                                
+            }
+            
+        });
+
+                
+
+            },
+            regis: function () {
+                this.testlg = false;
+            },
+            save: function () {
+                 const data = {
+                    ffName: JSON.stringify({
+                        user: this.username,
+                        pass: this.password,
+                        roo:  this.room
+                    })
+                }
+                this.$http.post('@Url.Action("ActionCreate", "Home")', data
+        ).then(response => {
+            if (response.data.status === '200') {
+                alert("บันทึกสำเร็จ");
+                this.testlg = true;
+              
+            } else {
+                alert(response.data.message)
+                                
+            }
+            
+        });
+            }
+        }
+
+    })
+</script>

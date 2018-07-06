@@ -1,0 +1,68 @@
+﻿@model Web2.Models.classchannel
+@{
+    ViewBag.Title = "About";
+}
+<div id="app">
+    <br> <br> <br> <br> <br>
+
+    <div class="col-md-12">
+        <input type="text" placeholder="room" class="form-control" v-model="roomat" />
+        <button type="button" class="btn btn-success" v-on:click="show">Search Room</button>
+    </div>
+   <div>
+       {{usern}}
+       </div>
+
+
+
+
+
+</div>
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            roomat:'',
+            testlg: true,
+            userroom: '',
+            usern:'',
+
+
+        },
+        methods: {
+            show: function () 
+            {
+
+                const data = {
+
+                    roomat: this.roomat,
+                        
+                }
+               this.$http.post('@Url.Action("Test", "Home")', data
+                ).then(response => {
+                    if (response.data.status === '200') {
+                
+                        alert(response.data.message)
+                        this.userroom = response.data.data
+                        this.usern = this.userroom.rooma
+                        
+              
+                    } else
+                    {
+                        alert(response.data.message)
+                                
+                    }
+            
+                                    });
+
+            }
+
+
+
+        }
+
+
+    })
+</script>
